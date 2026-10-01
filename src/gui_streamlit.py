@@ -24,12 +24,11 @@ if not root_path.exists() or not root_path.is_dir():
     st.warning("Geçerli bir klasör yolu giriniz. Örn: `/home/kullanici`")
     st.stop()
 
-@st.cache_data(show_spinner=False)
 def run_scan(root: str, top_n: int, days: int, limit_recent: int):
     root_p = Path(root)
     big = largest_dirs(root_p, top_n=top_n)
     rec = recent_files(root_p, days=days, limit=limit_recent)
-    big_df = pd.DataFrame(big)[["path","size_h","size_bytes","type"]]
+    big_df = pd.DataFrame(big, columns=["path", "size_h", "size_bytes", "type"])
     rec_df = pd.DataFrame(rec)
     if not rec_df.empty:
         rec_df["mtime_readable"] = pd.to_datetime(rec_df["mtime"], unit="s")
